@@ -1,0 +1,42 @@
+{
+  "name": "@liquid-labs/mui-extensions",
+  "version": "0.0.1",
+  "description": "Useful UI components building off Material UI.",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "babel --watch --source-maps inline src -d dist/",
+    "build": "babel --source-maps inline src -d dist/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Liquid-Labs/mui-extensions.git"
+  },
+  "keywords": [
+    "material-ui",
+    "ui",
+    "react-component",
+    "material"
+  ],
+  "author": "Zane Rockenbaugh <zane@liquid-labs.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Liquid-Labs/mui-extensions/issues"
+  },
+  "homepage": "https://github.com/Liquid-Labs/mui-extensions#readme",
+  "peerDependencies": {
+    "@material-ui/core": "1.x || 3.x"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
