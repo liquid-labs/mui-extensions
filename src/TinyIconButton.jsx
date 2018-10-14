@@ -6,6 +6,9 @@ import { withStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 
 const styles = {
+  root: {
+    padding: 0,
+  },
   tinyButton: {
     width: '24px',
     height: '24px',
@@ -28,7 +31,11 @@ const styles = {
 const TinyIconButtonBase = ({children, classes, placement, className, ...props}) => {
   className = classNames(className, classes.tinyButton, classes[placement])
   return (
-    <IconButton className={className} {...props}>{children}</IconButton>
+    <IconButton className={className}
+        classes={{root: classes.root}}
+        {...props}>
+      {children}
+    </IconButton>
   )
 }
 
