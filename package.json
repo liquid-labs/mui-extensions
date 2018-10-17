@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "description": "Useful UI components building off Material UI.",
   "main": "dist/index.js",
+  "module": "dist/index.es.js",
   "scripts": {
     "build": "catalyst-scripts \"$PWD\" build",
     "prepare": "catalyst-scripts \"$PWD\" build",
@@ -26,11 +27,11 @@
   },
   "homepage": "https://github.com/Liquid-Labs/mui-extensions#readme",
   "peerDependencies": {
-    "@material-ui/core": "1.x || 3.x"
+    "@material-ui/core": "1.x || 3.x",
+    "react": "15.x || 16.x"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.1.0",
-    "@liquid-labs/catalyst-scripts": "0.0.2"
+    "@liquid-labs/catalyst-scripts": "file:liquid-labs-catalyst-scripts-0.0.3.tgz"
   },
   "browserslist": [
     ">0.2%",
@@ -38,5 +39,9 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "@material-ui/icons": "^3.0.1",
+    "classnames": "^2.2.6",
+    "recompose": "^0.30.0"
+  }
 }
