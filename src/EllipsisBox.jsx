@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 export const EllipsisBox = ({children}) =>
   <div style={{
@@ -8,3 +9,7 @@ export const EllipsisBox = ({children}) =>
   >
     { children }
   </div>
+
+EllipsisBox.propTypes = {
+  children : PropTypes.object.isRequired
+}

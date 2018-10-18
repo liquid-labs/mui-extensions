@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { compose, withStateHandlers } from 'recompose'
 
 import Popover from '@material-ui/core/Popover'
@@ -42,6 +43,14 @@ const HelpBase = ({classes, helpOpen, helpClose, helpAnchor, help}) =>
       </Typography>
     </Popover>
   </div>
+
+HelpBase.propTypes = {
+  classes    : PropTypes.object.required,
+  helpOpen   : PropTypes.func.required,
+  helpClose  : PropTypes.func.required,
+  helpAnchor : Popover.propTypes.anchorEl,
+  help       : PropTypes.onOfType([PropTypes.object, PropTypes.func, PropTypes.string])
+}
 
 export const Help = compose(
   withStyles(styles, { name : 'Help' }),
