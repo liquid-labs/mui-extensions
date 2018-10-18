@@ -6,25 +6,25 @@ import { withStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 
 const styles = {
-  root: {
-    padding: 0,
+  root : {
+    padding : 0,
   },
-  tinyButton: {
-    width: '24px',
-    height: '24px',
-    '& svg': {
-      height: '18px',
-      width: '18px',
+  tinyButton : {
+    width   : '24px',
+    height  : '24px',
+    '& svg' : {
+      height : '18px',
+      width  : '18px',
     }
   },
   // placement styles
-  bottomRight: {
-    position: 'absolute',
-    bottom: '8px',
-    right: '8px'
+  bottomRight : {
+    position : 'absolute',
+    bottom   : '8px',
+    right    : '8px'
   },
-  floatRight: {
-    float: 'right'
+  floatRight : {
+    float : 'right'
   }
 }
 
@@ -32,7 +32,7 @@ const TinyIconButtonBase = ({children, classes, placement, className, ...props})
   className = classNames(className, classes.tinyButton, classes[placement])
   return (
     <IconButton className={className}
-        classes={{root: classes.root}}
+        classes={{root : classes.root}}
         {...props}>
       {children}
     </IconButton>

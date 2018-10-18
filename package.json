@@ -31,7 +31,7 @@
     "react": "15.x || 16.x"
   },
   "devDependencies": {
-    "@liquid-labs/catalyst-scripts": "file:liquid-labs-catalyst-scripts-0.0.3.tgz"
+    "@liquid-labs/catalyst-scripts": "0.0.5"
   },
   "browserslist": [
     ">0.2%",
@@ -42,6 +42,7 @@
   "dependencies": {
     "@material-ui/icons": "^3.0.1",
     "classnames": "^2.2.6",
+    "prop-types": "^15.6.2",
     "recompose": "^0.30.0"
   }
 }

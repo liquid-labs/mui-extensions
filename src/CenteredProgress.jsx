@@ -6,20 +6,20 @@ import { withStyles } from '@material-ui/core/styles';
 
 const style = {
   // alignment styles, matched to 'method' property.
-  absolute: {
-    position: 'absolute',
-    top: '50%',
-    marginTop: '-20px', // matches default size of 40; overriden if 'size' set
-    left: '50%',
-    marginLeft: '-20px'
+  absolute : {
+    position   : 'absolute',
+    top        : '50%',
+    marginTop  : '-20px', // matches default size of 40; overriden if 'size' set
+    left       : '50%',
+    marginLeft : '-20px'
   },
-  textAlign: {
-    textAlign: 'center'
+  textAlign : {
+    textAlign : 'center'
   },
-  flex: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignContent: 'center',
+  flex : {
+    display        : 'flex',
+    justifyContent : 'center',
+    alignContent   : 'center',
   }
 }
 
@@ -41,8 +41,8 @@ const CenteredProgressBase = ({method, classes, style, ...props}) => {
   else {
     return (
       <CircularProgress className={classes.absolute}
-        style={style}
-        {...props} />
+          style={style}
+          {...props} />
     )
   }
 }
