@@ -49,7 +49,8 @@ HelpBase.propTypes = {
   helpOpen   : PropTypes.func.required,
   helpClose  : PropTypes.func.required,
   helpAnchor : Popover.propTypes.anchorEl,
-  help       : PropTypes.onOfType([PropTypes.object, PropTypes.func, PropTypes.string])
+  // TODO: PropTypes.Node?
+  help       : PropTypes.oneOfType([PropTypes.object, PropTypes.func, PropTypes.string])
 }
 
 export const Help = compose(
