@@ -1,5 +1,6 @@
 export * from './CenteredProgress'
 export * from './EllipsisBox'
+export * from './Feedback'
 export * from './Help'
 export * from './NestedGrid'
 export * from './TinyIconButton'
