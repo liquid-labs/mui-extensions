@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/Liquid-Labs/mui-extensions#readme",
   "peerDependencies": {
-    "@liquid-labs/catalyst-core-ui": "0.0.6",
+    "@liquid-labs/catalyst-core-ui": "0.0.7",
     "@material-ui/core": "1.x || 3.x",
     "@material-ui/icons": "1.x || 3.x",
     "classnames": "^2.2.6",
