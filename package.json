@@ -1,9 +1,12 @@
 {
   "name": "@liquid-labs/mui-extensions",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Useful UI components building off Material UI.",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
+  "files": [
+    "/dist"
+  ],
   "scripts": {
     "build": "catalyst-scripts \"$PWD\" build",
     "prepare": "catalyst-scripts \"$PWD\" build",
