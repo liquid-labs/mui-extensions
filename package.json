@@ -1,9 +1,12 @@
 {
   "name": "@liquid-labs/mui-extensions",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "description": "Useful UI components building off Material UI.",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
+  "files": [
+    "/dist"
+  ],
   "scripts": {
     "build": "catalyst-scripts \"$PWD\" build",
     "prepare": "catalyst-scripts \"$PWD\" build",
@@ -32,7 +35,6 @@
     "classnames": "^2.2.6",
     "prop-types": "^15.6.2",
     "react": "16.x",
-    "react-redux": "^5.0.7",
     "recompose": "0.30.0"
   },
   "devDependencies": {
