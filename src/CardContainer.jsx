@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { compose } from 'recompose'
 
@@ -21,7 +22,7 @@ const styles = (theme) => ({
  * Grid cells laid out where each item in the row grows as big as the biggest
  * item, but doesn't
  */
-const CardContainer = ({
+const CardContainerBase = ({
   fixedSizeCards=true, minCardSize=300, preferredCardSize=320, spacing,
   xBreakpoint,
   classes, className, children, mainPaddingNumbers, style, theme,
@@ -72,9 +73,13 @@ const CardContainer = ({
   )
 }
 
-export default compose(
+const CardContainer = compose(
   withStyles(styles, { name : 'CardContainer' }),
   withMainPadding(),
   withScreenBreakpoints(),
   withTheme(),
-)(CardContainer)
+)(CardContainerBase)
+
+export {
+  CardContainer
+}
