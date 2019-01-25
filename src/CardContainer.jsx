@@ -63,7 +63,7 @@ const CardContainerBase = ({
   return (
     <Grid item container spacing={0} className={className}
         direction="column" justify="center"
-    > Hi!
+    >
       { childrenGroups.map((childGroup, i) =>
         <Grid key={groupKeys[i]} item container spacing={spacing} justify="center">
           { childGroup }
