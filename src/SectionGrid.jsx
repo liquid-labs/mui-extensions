@@ -3,9 +3,9 @@ import { compose } from 'recompose'
 import classNames from 'classnames'
 
 import Grid from '@material-ui/core/Grid'
-import { Help } from '@liquid-labs/mui-extensions'
+import { Help } from './Help'
 import Paper from '@material-ui/core/Paper'
-import { NestedGrid } from '@liquid-labs/mui-extensions'
+import { NestedGrid } from './NestedGrid'
 
 import { withStyles } from '@material-ui/core/styles'
 
