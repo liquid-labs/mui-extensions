@@ -25,7 +25,7 @@ const styles = (theme) => ({
 const CardContainerBase = ({
   fixedSizeCards=true, minCardSize=300, preferredCardSize=320, spacing,
   xBreakpoint,
-  classes, className, children, mainPaddingNumbers, style, theme,
+  classes, className, children, mainPaddingNumbers, theme,
   GridProps, ...props}) => {
   className = classNames(classes.root, className)
 
@@ -63,7 +63,7 @@ const CardContainerBase = ({
   return (
     <Grid item container spacing={0} className={className}
         direction="column" justify="center"
-    >
+    > Hi!
       { childrenGroups.map((childGroup, i) =>
         <Grid key={groupKeys[i]} item container spacing={spacing} justify="center">
           { childGroup }
@@ -87,7 +87,6 @@ CardContainerBase.propTypes = {
   className          : PropTypes.string,
   children           : PropTypes.node.isRequired,
   mainPaddingNumbers : mainPaddingsNumbersShape.isRequired,
-  style              : PropTypes.object.isRequired,
   theme              : PropTypes.object.isRequired,
   GridProps          : PropTypes.object
 }
