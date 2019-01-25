@@ -33,7 +33,7 @@ const style = (theme) => ({
 
 const innerSpacing = 8
 
-const SectionGrid = ({breakpoint, title, help, BottomContent, elevation,
+const SectionGridBase = ({breakpoint, title, help, BottomContent, elevation,
     square, helpAnchor, helpOpen, helpClose,
     children, classes, className, ...props}) => {
   className = classNames(classes.root, className)
@@ -78,6 +78,10 @@ const SectionGrid = ({breakpoint, title, help, BottomContent, elevation,
   )
 }
 
-export default compose(
+const SectionGrid = compose(
   withStyles(style, { name: 'SectionGrid' })
-)(SectionGrid)
+)(SectionGridBase)
+
+export {
+  SectionGrid
+}
