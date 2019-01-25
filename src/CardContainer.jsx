@@ -73,6 +73,25 @@ const CardContainerBase = ({
   )
 }
 
+const mainPaddingsNumbersShape = PropTypes.shape({
+  side : PropTypes.number.isRequired
+})
+
+CardContainerBase.propTypes = {
+  fixedSizeCards     : PropTypes.bool,
+  minCardSize        : PropTypes.number,
+  preferredCardSize  : PropTypes.number,
+  spacing            : PropTypes.number,
+  xBreakpoint        : PropTypes.oneOf(['xs','sm','md','lg','xl']).isRequired,
+  classes            : PropTypes.object.isRequired,
+  className          : PropTypes.string,
+  children           : PropTypes.node.isRequired,
+  mainPaddingNumbers : mainPaddingsNumbersShape.isRequired,
+  style              : PropTypes.object.isRequired,
+  theme              : PropTypes.object.isRequired,
+  GridProps          : PropTypes.object
+}
+
 const CardContainer = compose(
   withStyles(styles, { name : 'CardContainer' }),
   withMainPadding(),
