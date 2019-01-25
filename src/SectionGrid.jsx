@@ -10,48 +10,50 @@ import { NestedGrid } from './NestedGrid'
 import { withStyles } from '@material-ui/core/styles'
 
 const style = (theme) => ({
-  root: {
-    display: 'flex',
+  root : {
+    display : 'flex',
   },
-  paper: {
-    flex: '1 1 auto',
-    paddingBottom: '16px'
+  paper : {
+    flex          : '1 1 auto',
+    paddingBottom : '16px'
   },
-  sectionTitle: {
+  sectionTitle : {
     ...theme.typography.subheading,
-    fontStyle: 'oblique',
-    color: theme.palette.primary.main,
-    fontWeight: 500,
+    fontStyle     : 'oblique',
+    color         : theme.palette.primary.main,
+    fontWeight    : 500,
     // with spacing 8, that's a normal bottom padding of 4; we maintain the same
     // distance overall with 0 + (3 + 2) + 1, adding a little extra spacing on
     // bottom to distance the header element
-    paddingBottom: '0 !important',
-    margin: '0 4px 3px 4px', // TODO: support non-8 spacings
-    borderBottom: `1px solid ${theme.palette.primary.main}`
+    paddingBottom : '0 !important',
+    margin        : '0 4px 3px 4px', // TODO: support non-8 spacings
+    borderBottom  : `1px solid ${theme.palette.primary.main}`
   }
 })
 
 const innerSpacing = 8
 
 const SectionGridBase = ({breakpoint, title, help, BottomContent, elevation,
-    square, helpAnchor, helpOpen, helpClose,
-    children, classes, className, ...props}) => {
+  square, helpAnchor, helpOpen, helpClose,
+  children, classes, className, ...props}) => {
   className = classNames(classes.root, className)
-  elevation = elevation || (() => { switch (breakpoint) {
+  elevation = elevation || (() => {
+    switch (breakpoint) {
     case 'xs': return 0
     case 'sm': return 1
     case 'md': return 3
     case 'lg': return 5
     case 'xl': return 7
     default: return 3
-  }})()
+    }
+  })()
   square = square || breakpoint === 'xs'
   const gridSpec = {
-    xs: 12,
-    sm: 6,
-    md: 4,
-    lg: 4,
-    xl: 3,
+    xs : 12,
+    sm : 6,
+    md : 4,
+    lg : 4,
+    xl : 3,
   }
   return (
     <Grid item {...props} {...gridSpec} className={className}>
@@ -59,16 +61,16 @@ const SectionGridBase = ({breakpoint, title, help, BottomContent, elevation,
           className={classNames(classes.paper)}
       >
         <NestedGrid
-          spacing={innerSpacing} direction="column" alignItems="flex-start" container>
-          {title && <Grid item style={{width: `calc(100% - ${innerSpacing}px`}} className={classes.sectionTitle}>
+            spacing={innerSpacing} direction="column" alignItems="flex-start" container>
+          {title && <Grid item style={{width : `calc(100% - ${innerSpacing}px`}} className={classes.sectionTitle}>
             {title}
             {help && <Help help={help} /> }
           </Grid>}
-          <NestedGrid item container spacing={innerSpacing} style={{width: '100%'}}>
+          <NestedGrid item container spacing={innerSpacing} style={{width : '100%'}}>
             {children}
           </NestedGrid>
-          {BottomContent &&
-          <Grid item style={{width: '100%'}}>
+          {BottomContent
+          && <Grid item style={{width : '100%'}}>
             <BottomContent />
           </Grid>
           }
@@ -79,7 +81,7 @@ const SectionGridBase = ({breakpoint, title, help, BottomContent, elevation,
 }
 
 const SectionGrid = compose(
-  withStyles(style, { name: 'SectionGrid' })
+  withStyles(style, { name : 'SectionGrid' })
 )(SectionGridBase)
 
 export {

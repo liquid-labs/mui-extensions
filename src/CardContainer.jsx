@@ -9,10 +9,10 @@ import { withScreenBreakpoints } from './withScreenBreakpoints'
 import { withStyles, withTheme } from '@material-ui/core/styles'
 
 const styles = (theme) => ({
-  root: {
-    flexGrow: '1',
-    margin: 0,
-    width: 'initial'
+  root : {
+    flexGrow : '1',
+    margin   : 0,
+    width    : 'initial'
   }
 })
 
@@ -22,20 +22,22 @@ const styles = (theme) => ({
  * item, but doesn't
  */
 const CardContainer = ({
-      fixedSizeCards=true, minCardSize=300, preferredCardSize=320, spacing,
-      xBreakpoint,
-      classes, className, children, mainPaddingNumbers, style, theme,
-      GridProps, ...props}) => {
+  fixedSizeCards=true, minCardSize=300, preferredCardSize=320, spacing,
+  xBreakpoint,
+  classes, className, children, mainPaddingNumbers, style, theme,
+  GridProps, ...props}) => {
   className = classNames(classes.root, className)
 
-  spacing = spacing || (() => { switch (xBreakpoint) {
+  spacing = spacing || (() => {
+    switch (xBreakpoint) {
     case 'xs': return 0
     case 'sm':
     case 'md': return 8
     case 'lg': return 16
     case 'xl': return 24
     default: return 8
-  }})()
+    }
+  })()
 
   const { values } = theme.breakpoints
   const effectiveWidth = values[xBreakpoint] - mainPaddingNumbers.side * 2
@@ -71,7 +73,7 @@ const CardContainer = ({
 }
 
 export default compose(
-  withStyles(styles, { name: 'CardContainer' }),
+  withStyles(styles, { name : 'CardContainer' }),
   withMainPadding(),
   withScreenBreakpoints(),
   withTheme(),
