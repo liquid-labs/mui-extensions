@@ -1,6 +1,6 @@
 import React from 'react'
 import { branch, compose, lifecycle, renderComponent, renderNothing, setDisplayName, withProps, withState } from 'recompose'
-import { CenteredProgress } from './CenteredProgress'
+import { CenteredProgress } from '../components/CenteredProgress'
 
 const tooLong = 5000; // ms
 

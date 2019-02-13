@@ -8,10 +8,10 @@
     "/dist"
   ],
   "scripts": {
-    "build": "catalyst-scripts \"$PWD\" build",
-    "prepare": "catalyst-scripts \"$PWD\" build",
-    "start": "catalyst-scripts \"$PWD\" start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "catalyst-scripts build",
+    "prepare": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "catalyst-scripts watch"
   },
   "repository": {
     "type": "git",
@@ -34,11 +34,11 @@
     "@material-ui/icons": "1.x || 3.x",
     "classnames": "^2.2.6",
     "prop-types": "^15.6.2",
-    "react": "16.x",
+    "react": "^16.8.1",
     "recompose": "0.30.0"
   },
   "devDependencies": {
-    "@liquid-labs/catalyst-scripts": "0.0.7"
+    "@liquid-labs/catalyst-scripts": "latest"
   },
   "browserslist": [
     ">0.2%",
