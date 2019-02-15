@@ -5,8 +5,8 @@ import { compose } from 'recompose'
 
 import Grid from '@material-ui/core/Grid'
 
-import { withMainPadding } from './withMainPadding'
-import { withScreenBreakpoints } from './withScreenBreakpoints'
+import { withMainPadding } from '../hocs/withMainPadding'
+import { withScreenBreakpoints } from '../hocs/withScreenBreakpoints'
 import { withStyles, withTheme } from '@material-ui/core/styles'
 
 const styles = (theme) => ({
