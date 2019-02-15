@@ -1,4 +1,5 @@
 export * from './components/CardContainer'
+export * from './components/Centered'
 export * from './components/CenteredProgress'
 export * from './components/EllipsisBox'
 export * from './components/Help'
