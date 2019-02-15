@@ -1,6 +1,6 @@
 {
   "name": "@liquid-labs/mui-extensions",
-  "version": "0.0.10",
+  "version": "1.0.0-prototype.0",
   "description": "Useful UI components building off Material UI.",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
