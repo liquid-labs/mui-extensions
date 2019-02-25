@@ -38,7 +38,7 @@
     "recompose": "0.30.0"
   },
   "devDependencies": {
-    "@liquid-labs/catalyst-scripts": "latest"
+    "@liquid-labs/catalyst-scripts": "^1.0.0-alpha.12"
   },
   "browserslist": [
     ">0.2%",
