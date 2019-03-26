@@ -45,9 +45,9 @@ const HelpBase = ({classes, helpOpen, helpClose, helpAnchor, help}) =>
   </div>
 
 HelpBase.propTypes = {
-  classes    : PropTypes.object.required,
-  helpOpen   : PropTypes.func.required,
-  helpClose  : PropTypes.func.required,
+  classes    : PropTypes.object.isRequired,
+  helpOpen   : PropTypes.func.isRequired,
+  helpClose  : PropTypes.func.isRequired,
   helpAnchor : Popover.propTypes.anchorEl,
   // TODO: PropTypes.Node?
   help       : PropTypes.oneOfType([PropTypes.object, PropTypes.func, PropTypes.string])
