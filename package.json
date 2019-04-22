@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/Liquid-Labs/mui-extensions#readme",
   "peerDependencies": {
+    "@liquid-labs/react-viewport-context": "^1.0.0-prototype.3",
     "@material-ui/core": "1.x || 3.x",
     "@material-ui/icons": "1.x || 3.x",
     "classnames": "^2.2.6",
@@ -38,7 +39,8 @@
     "recompose": "0.30.0"
   },
   "devDependencies": {
-    "@liquid-labs/catalyst-scripts": "^1.0.0-alpha.12"
+    "@liquid-labs/catalyst-scripts": "^1.0.0-alpha.12",
+    "@liquid-labs/react-viewport-context": "^1.0.0-prototype.3"
   },
   "browserslist": [
     ">0.2%",
