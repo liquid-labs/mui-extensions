@@ -55,6 +55,7 @@ const CardContainerBase = ({
       childrenGroups.push([])
     }
     childrenGroups[childrenGroups.length - 1].push(child)
+    // childrenGroups[childrenGroups.length - 1].push(React.cloneElement(child, { style: {minWidth: minCardSize, maxWidth: preferredCardSize} }))
   })
   const groupKeys = childrenGroups.map((childGroup) =>
     childGroup.reduce((acc, child) => `${acc}-${child.key}`, '')
