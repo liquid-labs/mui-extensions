@@ -33,7 +33,7 @@ const Centered = withStyles(style)(({method, classes, style, children, ...props}
   }
 
   const allProps = {
-    style: style,
+    style : style,
     ...props
   }
   if (method && method !== 'absolute') {

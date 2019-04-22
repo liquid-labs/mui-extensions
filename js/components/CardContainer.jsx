@@ -34,12 +34,12 @@ const CardContainer = ({
 
   spacing = spacing || (() => {
     switch (breakpoint) {
-      case 'xs': return 0
-      case 'sm':
-      case 'md': return spacingUnit
-      case 'lg': return 2 * spacingUnit
-      case 'xl': return 3 * spacingUnit
-      default: return spacingUnit
+    case 'xs': return 0
+    case 'sm':
+    case 'md': return spacingUnit
+    case 'lg': return 2 * spacingUnit
+    case 'xl': return 3 * spacingUnit
+    default: return spacingUnit
     }
   })()
 
@@ -80,13 +80,13 @@ const CardContainer = ({
 }
 
 CardContainer.propTypes = {
-  fixedSizeCards     : PropTypes.bool,
-  minCardSize        : PropTypes.number,
-  preferredCardSize  : PropTypes.number,
-  spacing            : PropTypes.number,
-  className          : PropTypes.string,
-  children           : PropTypes.node.isRequired,
-  GridProps          : PropTypes.object
+  fixedSizeCards    : PropTypes.bool,
+  minCardSize       : PropTypes.number,
+  preferredCardSize : PropTypes.number,
+  spacing           : PropTypes.number,
+  className         : PropTypes.string,
+  children          : PropTypes.node.isRequired,
+  GridProps         : PropTypes.object
 }
 
 export {

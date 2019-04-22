@@ -20,32 +20,32 @@ const defaultTheme = {
     }
   },
   spacing : { unit : 8 },
-  layout : {
+  layout  : {
     mainPadding : {
       'xs' : {
-        top: 0,
-        side: 0,
-        bottom: 0,
+        top    : 0,
+        side   : 0,
+        bottom : 0,
       },
       'sm' : {
-        top: 0.5,
-        side: 0.25,
-        bottom: 0.5,
+        top    : 0.5,
+        side   : 0.25,
+        bottom : 0.5,
       },
       'md' : {
-        top: 0.5,
-        side: 1,
-        bottom: 1,
+        top    : 0.5,
+        side   : 1,
+        bottom : 1,
       },
       'lg' : {
-        top: 1,
-        side: 1,
-        bottom: 1,
+        top    : 1,
+        side   : 1,
+        bottom : 1,
       },
       'xl' : {
-        top: 1,
-        side: 1,
-        bottom: 1,
+        top    : 1,
+        side   : 1,
+        bottom : 1,
       },
     }
   },
@@ -64,27 +64,27 @@ describe("CardContainer", () => {
 
   describe("with default settings", () => {
     test.each(layoutTestData)("at width %d, lays out %d cards per row",
-        (width, cardsPerRow) => {
-      window.innerWidth = width
+      (width, cardsPerRow) => {
+        window.innerWidth = width
 
-      const { getByTestId } = render(
-        <ThemeProvider theme={defaultTheme}>
-          <ViewportContext plugins={viewportPlugins}>
-            <CardContainer test-id="cardContainer">
-              <div>1</div>
-              <div>2</div>
-              <div>3</div>
-              <div>4</div>
-              <div>5</div>
-              <div>6</div>
-              <div>7</div>
-            </CardContainer>
-          </ViewportContext>
-        </ThemeProvider>
-      )
+        const { getByTestId } = render(
+          <ThemeProvider theme={defaultTheme}>
+            <ViewportContext plugins={viewportPlugins}>
+              <CardContainer test-id="cardContainer">
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+                <div>7</div>
+              </CardContainer>
+            </ViewportContext>
+          </ThemeProvider>
+        )
 
-      const cardContainer = getByTestId('cardContainer')
-      console.log(cardContainer)
-    })
+        const cardContainer = getByTestId('cardContainer')
+        console.log(cardContainer)
+      })
   })
 })
