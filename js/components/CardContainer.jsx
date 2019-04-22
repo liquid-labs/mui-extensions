@@ -20,6 +20,7 @@ const useCardContainStyles = makeStyles({
  * the same height.
  */
 const CardContainer = ({
+  layoutToBreakpoint=false,
   fixedSizeCards=true, minCardSize=300, preferredCardSize=320, spacing,
   className, children,
   GridProps, ...props}) => {
@@ -27,7 +28,12 @@ const CardContainer = ({
   const theme = useTheme()
   const spacingUnit = theme.spacing.unit
 
-  const { breakpoint, mainPaddingSpec } = useViewportInfo()
+  const { breakpoint, mainPaddingSpec, width } = useViewportInfo()
+  if (process.env.NODE_ENV !== 'production') {
+    if (width === undefined && !layoutToBreakpoint) {
+      console.warn("CardContainer 'layoutToBreakpoint' is 'false', but 'width' is not available from 'useViewPortInfo.'\nTry adding 'widthPlugin' to the 'ViewportContext' 'plugins'.")
+    }
+  }
 
   const classes = useCardContainStyles()
   className = classNames(classes.root, className)
@@ -43,15 +49,20 @@ const CardContainer = ({
     }
   })()
 
-
-
   const { values } = theme.breakpoints
-  const effectiveWidth = values[breakpoint] - mainPaddingSpec[breakpoint].side * 2
-  const preferredCardsPerRow =
-    Math.floor(effectiveWidth / (preferredCardSize + spacing))
+  const rawWidth = (layoutToBreakpoint && values[breakpoint])
+    || (width !== undefined && width)
+    || values[breakpoint]
+  const effectiveWidth = rawWidth - mainPaddingSpec[breakpoint].side * 2
+  const iterativeCardTester = (cardSize) => {
+    let test = 1
+    while ((test + 1) * cardSize + spacing * (test) <= effectiveWidth) test += 1
+    return test
+  }
+  const preferredCardsPerRow = iterativeCardTester(preferredCardSize)
   const cardsPerRow = preferredCardsPerRow > 1
     ? preferredCardsPerRow
-    : Math.floor(effectiveWidth / (minCardSize + spacing)) || 1
+    : iterativeCardTester(minCardSize)
 
   const childrenGroups = [[]]
   React.Children.forEach(children, (child) => {
@@ -62,13 +73,14 @@ const CardContainer = ({
     childrenGroups[childrenGroups.length - 1].push(child)
     // childrenGroups[childrenGroups.length - 1].push(React.cloneElement(child, { style: {minWidth: minCardSize, maxWidth: preferredCardSize} }))
   })
-  const groupKeys = childrenGroups.map((childGroup) =>
-    childGroup.reduce((acc, child) => `${acc}-${child.key}`, '')
+  let count = 0
+  const groupKeys = childrenGroups.map((childGroup, i) =>
+    childGroup.reduce((acc, child, j) => `${acc}-${child.key || count++}`, '')
   )
 
   return (
     <Grid item container spacing={0} className={className}
-        direction="column" justify="center"
+        direction="column" justify="center" {...props}
     >
       { childrenGroups.map((childGroup, i) =>
         <Grid key={groupKeys[i]} item container spacing={spacing} justify="center">

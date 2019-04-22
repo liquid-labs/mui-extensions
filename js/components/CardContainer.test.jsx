@@ -3,7 +3,7 @@ import React from 'react'
 
 import { CardContainer } from './CardContainer'
 import { ThemeProvider } from '@material-ui/styles'
-import { ViewportContext, mainPaddingPlugin } from '@liquid-labs/react-viewport-context'
+import { ViewportContext, mainPaddingPlugin, widthPlugin } from '@liquid-labs/react-viewport-context'
 
 import { act, cleanup, render } from 'react-testing-library'
 
@@ -29,7 +29,7 @@ const defaultTheme = {
       },
       'sm' : {
         top    : 0.5,
-        side   : 0.25,
+        side   : 0.5,
         bottom : 0.5,
       },
       'md' : {
@@ -51,26 +51,34 @@ const defaultTheme = {
   },
 }
 
+const smSpacing = 8
+const smSidePadding = 2*defaultTheme.spacing.unit * defaultTheme.layout.mainPadding.sm.side
+const defMinCardSize = 300
+
+const min2Cards = defMinCardSize * 2 + smSpacing + smSidePadding
+
 const layoutTestData = [
-  [480, 1],
+  //[480, 1, 7],
   //[600, 1],
-  //[300*2+8+4*2, 2],
+  [min2Cards-1, 1, 7],
+  [min2Cards, 2, 4],
+  //[350*2+8+4*2, 2, 4],
 ]
 
-const viewportPlugins = [mainPaddingPlugin]
+const viewportPlugins = [widthPlugin, mainPaddingPlugin]
 
 describe("CardContainer", () => {
   afterEach(cleanup)
 
   describe("with default settings", () => {
-    test.each(layoutTestData)("at width %d, lays out %d cards per row",
-      (width, cardsPerRow) => {
+    test.each(layoutTestData)("at width %d, lays out %d cards/row in %d rows",
+      (width, cardsPerRow, rowCount) => {
         window.innerWidth = width
 
         const { getByTestId } = render(
           <ThemeProvider theme={defaultTheme}>
             <ViewportContext plugins={viewportPlugins}>
-              <CardContainer test-id="cardContainer">
+              <CardContainer data-testid="cardContainer">
                 <div>1</div>
                 <div>2</div>
                 <div>3</div>
@@ -84,7 +92,8 @@ describe("CardContainer", () => {
         )
 
         const cardContainer = getByTestId('cardContainer')
-        console.log(cardContainer)
+        expect(cardContainer.children.length).toBe(rowCount)
+        expect(cardContainer.children[0].children.length).toBe(cardsPerRow)
       })
   })
 })
