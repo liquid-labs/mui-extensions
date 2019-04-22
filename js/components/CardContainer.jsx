@@ -1,15 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { compose } from 'recompose'
 
 import Grid from '@material-ui/core/Grid'
 
-import { withMainPadding } from '../hocs/withMainPadding'
-import { withScreenBreakpoints } from '../hocs/withScreenBreakpoints'
-import { withStyles, withTheme } from '@material-ui/core/styles'
+import { makeStyles, useTheme } from '@material-ui/styles'
+import { useViewportInfo } from '@liquid-labs/react-viewport-context'
 
-const styles = (theme) => ({
+const useCardContainStyles = makeStyles({
   root : {
     flexGrow : '1',
     margin   : 0,
@@ -18,30 +16,37 @@ const styles = (theme) => ({
 })
 
 /**
- * Lays out children as cards row by row. Part of the motivation was to have a
- * Grid cells laid out where each item in the row grows as big as the biggest
- * item, but doesn't
+ * Lays out children as cards row by row. The items in each row will be the
+ * the same height.
  */
-const CardContainerBase = ({
+const CardContainer = ({
   fixedSizeCards=true, minCardSize=300, preferredCardSize=320, spacing,
-  xBreakpoint,
-  classes, className, children, mainPaddingNumbers, theme,
+  className, children,
   GridProps, ...props}) => {
+
+  const theme = useTheme()
+  const spacingUnit = theme.spacing.unit
+
+  const { breakpoint, mainPaddingSpec } = useViewportInfo()
+
+  const classes = useCardContainStyles()
   className = classNames(classes.root, className)
 
   spacing = spacing || (() => {
-    switch (xBreakpoint) {
-    case 'xs': return 0
-    case 'sm':
-    case 'md': return 8
-    case 'lg': return 16
-    case 'xl': return 24
-    default: return 8
+    switch (breakpoint) {
+      case 'xs': return 0
+      case 'sm':
+      case 'md': return spacingUnit
+      case 'lg': return 2 * spacingUnit
+      case 'xl': return 3 * spacingUnit
+      default: return spacingUnit
     }
   })()
 
+
+
   const { values } = theme.breakpoints
-  const effectiveWidth = values[xBreakpoint] - mainPaddingNumbers.side * 2
+  const effectiveWidth = values[breakpoint] - mainPaddingSpec[breakpoint].side * 2
   const preferredCardsPerRow =
     Math.floor(effectiveWidth / (preferredCardSize + spacing))
   const cardsPerRow = preferredCardsPerRow > 1
@@ -74,30 +79,15 @@ const CardContainerBase = ({
   )
 }
 
-const mainPaddingsNumbersShape = PropTypes.shape({
-  side : PropTypes.number.isRequired
-})
-
-CardContainerBase.propTypes = {
+CardContainer.propTypes = {
   fixedSizeCards     : PropTypes.bool,
   minCardSize        : PropTypes.number,
   preferredCardSize  : PropTypes.number,
   spacing            : PropTypes.number,
-  xBreakpoint        : PropTypes.oneOf(['xs','sm','md','lg','xl']).isRequired,
-  classes            : PropTypes.object.isRequired,
   className          : PropTypes.string,
   children           : PropTypes.node.isRequired,
-  mainPaddingNumbers : mainPaddingsNumbersShape.isRequired,
-  theme              : PropTypes.object.isRequired,
   GridProps          : PropTypes.object
 }
-
-const CardContainer = compose(
-  withStyles(styles, { name : 'CardContainer' }),
-  withMainPadding(),
-  withScreenBreakpoints(),
-  withTheme(),
-)(CardContainerBase)
 
 export {
   CardContainer
