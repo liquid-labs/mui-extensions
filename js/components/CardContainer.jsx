@@ -15,6 +15,13 @@ const useCardContainStyles = makeStyles({
   }
 })
 
+const floorTo12Factor = (n) => {
+  if (n >= 12) return 12
+  else {
+    while ((12 % n) !== 0) n -= 1
+    return n
+  }
+}
 /**
  * Lays out children as cards row by row. The items in each row will be the
  * the same height.
@@ -57,33 +64,44 @@ const CardContainer = ({
   const iterativeCardTester = (cardSize) => {
     let test = 1
     while ((test + 1) * cardSize + spacing * (test) <= effectiveWidth) test += 1
-    return test
+    // TODO: also balance the cards, so we would prefer, for example 2/2 over 3/1
+    // TODO: add option to 'grid' children, include 'itemProps' to apply to imposed <Grid> in that case
+    // TODO: only lock to 12-factor if we 'grid' the children (in which case grid size = 12/cardsPerRow)
+    return floorTo12Factor(test)
   }
   const preferredCardsPerRow = iterativeCardTester(preferredCardSize)
   const cardsPerRow = preferredCardsPerRow > 1
     ? preferredCardsPerRow
     : iterativeCardTester(minCardSize)
 
-  const childrenGroups = [[]]
-  React.Children.forEach(children, (child) => {
-    const lastGroup = childrenGroups[childrenGroups.length - 1]
+  const rowGroups = [[]]
+  React.Children.forEach(children, (child, i) => {
+    const lastGroup = rowGroups[rowGroups.length - 1]
     if (lastGroup.length >= cardsPerRow) {
-      childrenGroups.push([])
+      rowGroups.push([])
     }
-    childrenGroups[childrenGroups.length - 1].push(child)
-    // childrenGroups[childrenGroups.length - 1].push(React.cloneElement(child, { style: {minWidth: minCardSize, maxWidth: preferredCardSize} }))
+    const key = `item-${child.key || i}`
+    child = React.cloneElement(child, {
+        style : {
+          minWidth: minCardSize,
+          maxWidth: preferredCardSize,
+        }
+      })
+
+    rowGroups[rowGroups.length - 1].push(child)
   })
+
   let count = 0
-  const groupKeys = childrenGroups.map((childGroup, i) =>
-    childGroup.reduce((acc, child, j) => `${acc}-${child.key || count++}`, '')
+  const rowKeys = rowGroups.map((rowGroup, i) =>
+    rowGroup.reduce((acc, child, j) => `${acc}-${child.key || count++}`, '')
   )
 
+  // TODO: add 'rowProps' prop
+  // TODO: add 'colSpacing' <- should effect top/bottom, but not side? (does it already?)
   return (
-    <Grid item container spacing={0} className={className}
-        direction="column" justify="center" {...props}
-    >
-      { childrenGroups.map((childGroup, i) =>
-        <Grid key={groupKeys[i]} item container spacing={spacing} justify="center">
+    <Grid container spacing={8} className={className} {...props}>
+      { rowGroups.map((childGroup, i) =>
+        <Grid id={rowKeys[i]} key={rowKeys[i]} item xs={12} spacing={spacing} style={{display: 'flex', justifyContent: 'center', alignItems: 'stretch'}}>
           { childGroup }
         </Grid>
       )}
