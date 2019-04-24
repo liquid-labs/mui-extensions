@@ -98,6 +98,7 @@ const CardContainer = ({
 
   // TODO: add 'rowProps' prop
   // TODO: add 'colSpacing' <- should effect top/bottom, but not side? (does it already?)
+  // https://material-ui.com/layout/grid/#nested-grid (used v3.9.3)
   return (
     <Grid container spacing={8} className={className} {...props}>
       { rowGroups.map((childGroup, i) =>
