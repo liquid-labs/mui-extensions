@@ -7,6 +7,8 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles, useTheme } from '@material-ui/styles'
 import { useViewportInfo } from '@liquid-labs/react-viewport-context'
 
+import * as msgs from '../msgs'
+
 const useCardContainStyles = makeStyles({
   root : {
     flexGrow : '1',
@@ -22,6 +24,29 @@ const floorTo12Factor = (n) => {
     return n
   }
 }
+
+const defaultSpacingSpec = {
+  'xs' : 0,
+  'sm' : 1,
+  'md' : 1,
+  'lg' : 2,
+  'xl' : 2,
+}
+
+const getSpacing = (breakpoint, spacingUnit, spacing) => {
+  if (spacing === undefined) return defaultSpacingSpec[breakpoint] * spacingUnit
+  else {
+    const sType = typeof spacing
+    return sType === 'function'
+      ? getSpacing(breakpoint, spacingUnit, spacing(breakpoint))
+      : sType === 'object'
+        ? getSpacing(breakpoint, spacingUnit, spacing[breakpoint])
+        : sType === 'number'
+          ? spacing * spacingUnit
+          : spacing
+  }
+}
+
 /**
  * Lays out children as cards row by row. The items in each row will be the
  * the same height.
@@ -38,23 +63,14 @@ const CardContainer = ({
   const { breakpoint, mainPaddingSpec, width } = useViewportInfo()
   if (process.env.NODE_ENV !== 'production') {
     if (width === undefined && !layoutToBreakpoint) {
-      console.warn("CardContainer 'layoutToBreakpoint' is 'false', but 'width' is not available from 'useViewPortInfo.'\nTry adding 'widthPlugin' to the 'ViewportContext' 'plugins'.")
+      console.warn(msgs.noWidthLayoutWarning)
     }
   }
 
   const classes = useCardContainStyles()
   className = classNames(classes.root, className)
 
-  spacing = spacing || (() => {
-    switch (breakpoint) {
-    case 'xs': return 0
-    case 'sm':
-    case 'md': return spacingUnit
-    case 'lg': return 2 * spacingUnit
-    case 'xl': return 3 * spacingUnit
-    default: return spacingUnit
-    }
-  })()
+  spacing = getSpacing(breakpoint, spacingUnit, spacing)
 
   const { values } = theme.breakpoints
   const rawWidth = (layoutToBreakpoint && values[breakpoint])
@@ -94,7 +110,7 @@ const CardContainer = ({
       rowGroups.push(currGroup)
     }
     if (!child.key) {
-      console.warn("Please define a unique 'key' for each CardContainer child. Missing for: ", child)
+      console.warn(msgs.warnChildKey, child)
     }
     // Re spacing: 'spacing' is set to zero and we manage spacing between the
     // cards ourselves. Like the standard 'Grid' spacing, the spacing is between
@@ -145,5 +161,6 @@ CardContainer.propTypes = {
 }
 
 export {
-  CardContainer
+  CardContainer,
+  getSpacing
 }

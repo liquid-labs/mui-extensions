@@ -1,11 +1,13 @@
 /* global afterEach describe expect test */
 import React from 'react'
 
-import { CardContainer } from './CardContainer'
+import { CardContainer, getSpacing } from './CardContainer'
 import { ThemeProvider } from '@material-ui/styles'
 import { ViewportContext, mainPaddingPlugin, widthPlugin } from '@liquid-labs/react-viewport-context'
 
 import { act, cleanup, render } from 'react-testing-library'
+
+import * as msgs from '../msgs'
 
 // following Material UI default theme 3.9.3
 const defaultTheme = {
@@ -116,5 +118,60 @@ describe("CardContainer", () => {
       expect(cardContainer.children[0].children.length).toBe(3)
       expect(cardContainer.children[1].children.length).toBe(2)
     })
+  })
+
+  test("issues warning if 'width' not availble when 'layoutToBreakpoint' is false (default)", () =>{
+    const spy = jest.spyOn(console, 'warn').mockImplementation(jest.fn())
+    const { getByTestId } = render(
+      <ThemeProvider theme={defaultTheme}>
+        <ViewportContext plugins={[mainPaddingPlugin]}>
+          <CardContainer data-testid="cardContainer">
+            <div key="1">1</div>
+          </CardContainer>
+        </ViewportContext>
+      </ThemeProvider>
+    )
+
+    const cardContainer = getByTestId('cardContainer')
+    expect(spy).toHaveBeenCalledWith(msgs.noWidthLayoutWarning)
+
+    spy.mockRestore()
+  })
+
+  test("issues warning if child is missing a key", () => {
+    const spy = jest.spyOn(console, 'warn').mockImplementation(jest.fn())
+    const supress = jest.spyOn(console, 'error').mockImplementation(jest.fn())
+
+    const child = <div>1</div>
+    const { getByTestId } = render(
+      <ThemeProvider theme={defaultTheme}>
+        <ViewportContext plugins={viewportPlugins}>
+          <CardContainer data-testid="cardContainer">
+            {child}
+          </CardContainer>
+        </ViewportContext>
+      </ThemeProvider>
+    )
+
+    const cardContainer = getByTestId('cardContainer')
+    expect(spy).toHaveBeenCalledWith(msgs.warnChildKey, child)
+
+    spy.mockRestore()
+    supress.mockRestore()
+  })
+})
+
+const spacingData = [
+  ['string', '2px', '2px'],
+  ['default spacing', undefined, 8],
+  ['spacing map to unit', { sm : 1 }, 8],
+  ['spacing map to string', { sm : '1em' }, '1em'],
+  ['function returning unit', () => 1, 8],
+  ['function returning string', () => '1px', '1px'],
+]
+
+describe("getSpacing", () => {
+  test.each(spacingData)("expects %s: '%p' to resolve to %s", (desc, value, expected) => {
+    expect(getSpacing('sm', 8, value)).toBe(expected)
   })
 })

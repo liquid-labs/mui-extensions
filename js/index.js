@@ -1,4 +1,4 @@
-export * from './components/CardContainer'
+export { CardContainer } from './components/CardContainer'
 export * from './components/Centered'
 export * from './components/CenteredProgress'
 export * from './components/EllipsisBox'
