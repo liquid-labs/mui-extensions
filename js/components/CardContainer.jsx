@@ -76,15 +76,22 @@ const CardContainer = ({
   const totalRows = Math.ceil((children.length + 0.0) / cardsPerRow)
   let childrenMapped = 0
   const rowGroups = [[]]
+
+  const hasNext = (currGroup, childrenMapped) => {
+    if ((totalRows - 1) === rowGroups.length) { // penultimate row
+      return (currGroup.length !== (children.length - childrenMapped)
+        && currGroup.length !== children.length - childrenMapped + 1)
+    }
+    else return currGroup.length + 1 <= cardsPerRow
+      && childrenMapped + 1 <= children.length
+  }
+
   React.Children.forEach(children, (child, i) => {
-    let lastGroup = rowGroups[rowGroups.length - 1]
-    if (lastGroup.length >= cardsPerRow
-        || (balanceRows
-            && (totalRows - 1) === rowGroups.length // penultimate row
-            && (lastGroup.length == (children.length - childrenMapped)
-                || lastGroup.length == children.length - childrenMapped + 1))) {
-      lastGroup = []
-      rowGroups.push(lastGroup)
+    let currGroup = rowGroups[rowGroups.length - 1]
+    if (currGroup.length >= cardsPerRow
+        || (balanceRows && !hasNext(currGroup, childrenMapped))) {
+      currGroup = []
+      rowGroups.push(currGroup)
     }
     if (!child.key) {
       console.warn("Please define a unique 'key' for each CardContainer child. Missing for: ", child)
@@ -100,11 +107,12 @@ const CardContainer = ({
           minWidth    : minCardSize,
           maxWidth    : preferredCardSize,
           paddingTop  : rowGroups.length > 1 ? spacing + 'px' : 0,
-          paddingLeft : lastGroup.length > 0 ? spacing + 'px' : 0,
+          paddingLeft : currGroup.length > 0 ? (spacing / 2) + 'px' : 0,
+          paddingRight : hasNext(currGroup, childrenMapped) ? (spacing / 2) + 'px' : 0,
         }, child.style)
       })
 
-    lastGroup.push(child)
+    currGroup.push(child)
     childrenMapped += 1
   })
 
