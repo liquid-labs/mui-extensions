@@ -53,47 +53,68 @@ const defaultTheme = {
 
 const smSpacing = 8
 const smSidePadding = 2*defaultTheme.spacing.unit * defaultTheme.layout.mainPadding.sm.side
+const lgSpacing = 8 * 2
+const lgSidePadding = 2*defaultTheme.spacing.unit * defaultTheme.layout.mainPadding.lg.side
 const defMinCardSize = 300
+const defPrefCardSize = 320
 
 const min2Cards = defMinCardSize * 2 + smSpacing + smSidePadding
+const pref4Cards = defPrefCardSize * 4 + lgSpacing * 3 + lgSidePadding
 
 const layoutTestData = [
   //[480, 1, 7],
   //[600, 1],
   [min2Cards-1, 1, 7],
   [min2Cards, 2, 4],
+  [pref4Cards-1, 3, 3],
+  [pref4Cards, 4, 2],
   //[350*2+8+4*2, 2, 4],
 ]
 
 const viewportPlugins = [widthPlugin, mainPaddingPlugin]
 
+const standardTestSetup = (width, childCount) => {
+  const children = []
+  for (let i = 0; i < childCount; i += 1)
+    children.push(<div key={i}>{i}</div>)
+  const { getByTestId } = render(
+    <ThemeProvider theme={defaultTheme}>
+      <ViewportContext plugins={viewportPlugins}>
+        <CardContainer data-testid="cardContainer">
+          { children }
+        </CardContainer>
+      </ViewportContext>
+    </ThemeProvider>
+  )
+
+  return getByTestId('cardContainer')
+}
+
 describe("CardContainer", () => {
   afterEach(cleanup)
 
   describe("with default settings", () => {
-    test.each(layoutTestData)("at width %d, lays out %d cards/row in %d rows",
+    test.each(layoutTestData)("at width %d, lays out 7 cards %d cards/row in %d rows",
       (width, cardsPerRow, rowCount) => {
         window.innerWidth = width
 
-        const { getByTestId } = render(
-          <ThemeProvider theme={defaultTheme}>
-            <ViewportContext plugins={viewportPlugins}>
-              <CardContainer data-testid="cardContainer">
-                <div>1</div>
-                <div>2</div>
-                <div>3</div>
-                <div>4</div>
-                <div>5</div>
-                <div>6</div>
-                <div>7</div>
-              </CardContainer>
-            </ViewportContext>
-          </ThemeProvider>
-        )
-
-        const cardContainer = getByTestId('cardContainer')
+        const cardContainer = standardTestSetup(width, 7)
         expect(cardContainer.children.length).toBe(rowCount)
         expect(cardContainer.children[0].children.length).toBe(cardsPerRow)
       })
+
+    test(`at width ${pref4Cards}, balances 6 cards in two rows of 3`, () => {
+      const cardContainer = standardTestSetup(pref4Cards, 6)
+      expect(cardContainer.children.length).toBe(2)
+      expect(cardContainer.children[0].children.length).toBe(3)
+      expect(cardContainer.children[1].children.length).toBe(3)
+    })
+
+    test(`at width ${pref4Cards}, balances 5 cards in rows of 3 and 2`, () => {
+      const cardContainer = standardTestSetup(pref4Cards, 5)
+      expect(cardContainer.children.length).toBe(2)
+      expect(cardContainer.children[0].children.length).toBe(3)
+      expect(cardContainer.children[1].children.length).toBe(2)
+    })
   })
 })

@@ -27,7 +27,7 @@ const floorTo12Factor = (n) => {
  * the same height.
  */
 const CardContainer = ({
-  layoutToBreakpoint=false,
+  layoutToBreakpoint=false, balanceRows=true, sidePadding,
   fixedSizeCards=true, minCardSize=300, preferredCardSize=320, spacing,
   className, children,
   rowProps, ...props}) => {
@@ -60,11 +60,10 @@ const CardContainer = ({
   const rawWidth = (layoutToBreakpoint && values[breakpoint])
     || (width !== undefined && width)
     || values[breakpoint]
-  const effectiveWidth = rawWidth - mainPaddingSpec[breakpoint].side * 2
+  const effectiveWidth = rawWidth - (sidePadding !== undefined ? sidePadding : mainPaddingSpec[breakpoint].side) * 2
   const iterativeCardTester = (cardSize) => {
     let test = 1
     while ((test + 1) * cardSize + spacing * (test) <= effectiveWidth) test += 1
-    // TODO: also balance the cards, so we would prefer, for example 2/2 over 3/1
     // TODO: add option to 'grid' children, include 'itemProps' to apply to imposed <Grid> in that case
     // TODO: only lock to 12-factor if we 'grid' the children (in which case grid size = 12/cardsPerRow)
     return floorTo12Factor(test)
@@ -74,10 +73,16 @@ const CardContainer = ({
     ? preferredCardsPerRow
     : iterativeCardTester(minCardSize)
 
+  const totalRows = Math.ceil((children.length + 0.0) / cardsPerRow)
+  let childrenMapped = 0
   const rowGroups = [[]]
   React.Children.forEach(children, (child, i) => {
     let lastGroup = rowGroups[rowGroups.length - 1]
-    if (lastGroup.length >= cardsPerRow) {
+    if (lastGroup.length >= cardsPerRow
+        || (balanceRows
+            && (totalRows - 1) === rowGroups.length // penultimate row
+            && (lastGroup.length == (children.length - childrenMapped)
+                || lastGroup.length == children.length - childrenMapped + 1))) {
       lastGroup = []
       rowGroups.push(lastGroup)
     }
@@ -99,6 +104,7 @@ const CardContainer = ({
       })
 
     lastGroup.push(child)
+    childrenMapped += 1
   })
 
   let count = 0
