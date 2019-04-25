@@ -30,7 +30,7 @@ const CardContainer = ({
   layoutToBreakpoint=false,
   fixedSizeCards=true, minCardSize=300, preferredCardSize=320, spacing,
   className, children,
-  GridProps, ...props}) => {
+  rowProps, ...props}) => {
 
   const theme = useTheme()
   const spacingUnit = theme.spacing.unit
@@ -76,37 +76,43 @@ const CardContainer = ({
 
   const rowGroups = [[]]
   React.Children.forEach(children, (child, i) => {
-    const lastGroup = rowGroups[rowGroups.length - 1]
+    let lastGroup = rowGroups[rowGroups.length - 1]
     if (lastGroup.length >= cardsPerRow) {
-      rowGroups.push([])
+      lastGroup = []
+      rowGroups.push(lastGroup)
     }
-    const key = `item-${child.key || i}`
+    if (!child.key) {
+      console.warn("Please define a unique 'key' for each CardContainer child. Missing for: ", child)
+    }
+    // Re spacing: 'spacing' is set to zero and we manage spacing between the
+    // cards ourselves. Like the standard 'Grid' spacing, the spacing is between
+    // items internally and cards laid out with 'flex-start', for example, will
+    // be flush against the container side.
+    // see https://material-ui.com/layout/grid/#nested-grid (used v3.9.3)
     child = React.cloneElement(child, {
-        style : {
-          minWidth: minCardSize,
-          maxWidth: preferredCardSize,
-        }
+        style : Object.assign({
+          minWidth    : minCardSize,
+          maxWidth    : preferredCardSize,
+          paddingTop  : rowGroups.length > 1 ? spacing + 'px' : 0,
+          paddingLeft : lastGroup.length > 0 ? spacing + 'px' : 0,
+        }, child.style)
       })
 
-    rowGroups[rowGroups.length - 1].push(child)
+    lastGroup.push(child)
   })
 
   let count = 0
   const rowKeys = rowGroups.map((rowGroup, i) =>
-    rowGroup.reduce((acc, child, j) => `${acc}-${child.key || count++}`, '')
+    `row-${rowGroup.reduce((acc, child, j) => `${acc}-${child.key || count++}`, '')}`
   )
 
-  // TODO: add 'rowProps' prop
   // TODO: add 'colSpacing' <- should effect top/bottom, but not side? (does it already?)
-  // https://material-ui.com/layout/grid/#nested-grid (used v3.9.3)
-  // Row 'spacing' is set to '0' and row spacing is implemented via padding
-  // style to avoid the overflow limitation noted in the mui docs.
-  const rowSpacing = 8
+  // see note above 'Re spacing'
   return (
-    <Grid container spacing={0} className={className} style={{ padding: `${rowSpacing}px 0`}} {...props}>
-      { rowGroups.map((childGroup, i) =>
-        <Grid id={rowKeys[i]} key={rowKeys[i]} item xs={12} spacing={spacing} style={{display: 'flex', justifyContent: 'center', alignItems: 'stretch'}}>
-          { childGroup }
+    <Grid container className={className} spacing={0} {...props}>
+      { rowGroups.map((rowGroup, i) =>
+        <Grid justify="center" alignItems="stretch" {...rowProps} key={rowKeys[i]} item xs={12} container spacing={0}>
+          { rowGroup }
         </Grid>
       )}
     </Grid>
@@ -120,7 +126,7 @@ CardContainer.propTypes = {
   spacing           : PropTypes.number,
   className         : PropTypes.string,
   children          : PropTypes.node.isRequired,
-  GridProps         : PropTypes.object
+  rowProps         : PropTypes.object
 }
 
 export {
