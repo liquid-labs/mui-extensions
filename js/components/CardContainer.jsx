@@ -117,15 +117,14 @@ const CardContainer = ({
     // items internally and cards laid out with 'flex-start', for example, will
     // be flush against the container side.
     // see https://material-ui.com/layout/grid/#nested-grid (used v3.9.3)
-    // TODO: to get the spacing right, need to split the left/right padding. this will require taking the 'balance' logic above and abstracting it so we can apply to the groups push and perform a lookahead to ask "is this the last card?" and "is there a next card?"
     child = React.cloneElement(child, {
         style : Object.assign({
           minWidth    : minCardSize,
           maxWidth    : preferredCardSize,
-          paddingTop  : rowGroups.length > 1 ? spacing + 'px' : 0,
-          paddingLeft : currGroup.length > 0 ? (spacing / 2) + 'px' : 0,
-          paddingRight : hasNext(currGroup, childrenMapped) ? (spacing / 2) + 'px' : 0,
-        }, child.style)
+          marginTop  : rowGroups.length > 1 ? spacing + 'px' : 0,
+          marginLeft : currGroup.length > 0 ? (spacing / 2) + 'px' : 0,
+          marginRight : hasNext(currGroup, childrenMapped) ? (spacing / 2) + 'px' : 0,
+        }, child.props.style)
       })
 
     currGroup.push(child)
