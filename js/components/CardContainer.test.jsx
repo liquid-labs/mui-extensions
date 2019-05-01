@@ -79,14 +79,14 @@ const layoutTestData = [
 
 const viewportPlugins = [widthPlugin, mainPaddingPlugin]
 
-const standardTestSetup = (width, childCount) => {
+const standardTestSetup = (childCount, props={}) => {
   const children = []
   for (let i = 0; i < childCount; i += 1)
     children.push(<div key={i}>{i}</div>)
   const { getByTestId } = render(
     <ThemeProvider theme={defaultTheme}>
       <ViewportContext plugins={viewportPlugins}>
-        <CardContainer data-testid="cardContainer">
+        <CardContainer data-testid="cardContainer" {...props}>
           { children }
         </CardContainer>
       </ViewportContext>
@@ -104,28 +104,48 @@ describe("CardContainer", () => {
       (width, cardsPerRow, rowCount) => {
         window.innerWidth = width
 
-        const cardContainer = standardTestSetup(width, 7)
-        expect(cardContainer.children.length).toBe(rowCount)
-        expect(cardContainer.children[0].children.length).toBe(cardsPerRow)
+        const cardContainer = standardTestSetup(7)
+        expect(cardContainer.children.length).toBe(rowCount + 2) // + bottom & top weightings
+        expect(cardContainer.children[1].children.length).toBe(cardsPerRow)
       })
 
     test(`at width ${pref4Cards}, balances 10 cards in rows of 4, 4, and 2`, () => {
       window.innerWidth = pref4Cards
 
-      const cardContainer = standardTestSetup(pref4Cards, 10)
-      expect(cardContainer.children.length).toBe(3)
-      expect(cardContainer.children[0].children.length).toBe(4)
+      const cardContainer = standardTestSetup(10)
+      expect(cardContainer.children.length).toBe(5) // 3 rows + bottom & top weightings
       expect(cardContainer.children[1].children.length).toBe(4)
-      expect(cardContainer.children[2].children.length).toBe(2)
+      expect(cardContainer.children[2].children.length).toBe(4)
+      expect(cardContainer.children[3].children.length).toBe(2)
     })
 
     test(`at width ${pref4Cards}, balances 5 cards in rows of 3 and 2`, () => {
       window.innerWidth = pref4Cards
 
-      const cardContainer = standardTestSetup(pref4Cards, 5)
-      expect(cardContainer.children.length).toBe(2)
+      const cardContainer = standardTestSetup(5)
+      expect(cardContainer.children.length).toBe(4) // 2 rows + bottom & top weightings
+      expect(cardContainer.children[1].children.length).toBe(3)
+      expect(cardContainer.children[2].children.length).toBe(2)
+    })
+  })
+
+  describe("weighting rows", () => {
+    test("top can be supressed", () => {
+      window.innerWidth = pref4Cards
+
+      const cardContainer = standardTestSetup(5, { topWeighting: 0 })
+      expect(cardContainer.children.length).toBe(3) // 2 rows + bottom weightings
       expect(cardContainer.children[0].children.length).toBe(3)
       expect(cardContainer.children[1].children.length).toBe(2)
+    })
+
+    test("bottom can be supressed", () => {
+      window.innerWidth = pref4Cards
+
+      const cardContainer = standardTestSetup(5, { bottomWeighting: 0 })
+      expect(cardContainer.children.length).toBe(3) // 2 rows + top weightings
+      expect(cardContainer.children[1].children.length).toBe(3)
+      expect(cardContainer.children[2].children.length).toBe(2)
     })
   })
 

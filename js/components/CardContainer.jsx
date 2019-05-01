@@ -48,7 +48,7 @@ const getSpacing = (breakpoint, spacingUnit, spacing) => {
 }
 
 const hasNext = (balanceRows, currRowCount, totalRows, currRowLength, cardsPerRow, childrenLeft) =>
-  console.log(balanceRows, currRowCount, totalRows, currRowLength, cardsPerRow, childrenLeft) || totalRows === 2 && currRowCount === 1
+  totalRows === 2 && currRowCount === 1
     ? ((currRowLength + childrenLeft) % 2) === 0
       ? currRowLength < childrenLeft
       : currRowLength <= childrenLeft
@@ -74,6 +74,7 @@ const hasNext = (balanceRows, currRowCount, totalRows, currRowLength, cardsPerRo
 const CardContainer = ({
   layoutToBreakpoint=false, balanceRows=true, sidePadding,
   fixedSizeCards=true, minCardSize=300, preferredCardSize=320, spacing,
+  topWeighting=1, bottomWeighting=2,
   className, children,
   rowProps, ...props}) => {
 
@@ -127,11 +128,10 @@ const CardContainer = ({
     const info = {}
     const penultimateRow = rowGroups.length + 1 === totalRows
     if (!hasNext(balanceRows, rowGroups.length, totalRows, currGroup.length, cardsPerRow, children.length - childrenMapped)) {
-      console.log(false)
       currGroup = []
       rowGroups.push(currGroup)
     }
-    else { console.log(true) }
+    
     if (!child.key) {
       console.warn(msgs.warnChildKey, child)
     }
@@ -161,12 +161,14 @@ const CardContainer = ({
   // TODO: add 'colSpacing' <- should effect top/bottom, but not side? (does it already?)
   // see note above 'Re spacing'
   return (
-    <Grid container className={className} spacing={0} {...props}>
+    <Grid container className={className} spacing={0} {...props} direction="column">
+      { topWeighting > 0 && <Grid item style={{flex: `${topWeighting} 0 auto`}} xs={12}></Grid> }
       { rowGroups.map((rowGroup, i) =>
-        <Grid justify="center" alignItems="stretch" {...rowProps} key={rowKeys[i]} item xs={12} container spacing={0}>
+        <Grid justify="center" alignItems="stretch" {...rowProps} key={rowKeys[i]} item container spacing={0}>
           { rowGroup }
         </Grid>
       )}
+      { bottomWeighting > 0 && <Grid item style={{flex: `${bottomWeighting} 0 auto`}} xs={12}></Grid> }
     </Grid>
   )
 }
