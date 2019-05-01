@@ -131,7 +131,7 @@ const CardContainer = ({
       currGroup = []
       rowGroups.push(currGroup)
     }
-    
+
     if (!child.key) {
       console.warn(msgs.warnChildKey, child)
     }
@@ -160,6 +160,7 @@ const CardContainer = ({
 
   // TODO: add 'colSpacing' <- should effect top/bottom, but not side? (does it already?)
   // see note above 'Re spacing'
+  // TODO: extract 'weighting' into a layout component
   return (
     <Grid container className={className} spacing={0} {...props} direction="column">
       { topWeighting > 0 && <Grid item style={{flex: `${topWeighting} 0 auto`}} xs={12}></Grid> }
