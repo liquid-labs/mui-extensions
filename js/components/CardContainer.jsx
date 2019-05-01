@@ -47,6 +47,26 @@ const getSpacing = (breakpoint, spacingUnit, spacing) => {
   }
 }
 
+const hasNext = (balanceRows, currRowCount, totalRows, currRowLength, cardsPerRow, childrenLeft) =>
+  console.log(balanceRows, currRowCount, totalRows, currRowLength, cardsPerRow, childrenLeft) || totalRows === 2 && currRowCount === 1
+    ? ((currRowLength + childrenLeft) % 2) === 0
+      ? currRowLength < childrenLeft
+      : currRowLength <= childrenLeft
+    : childrenLeft > 0 && currRowLength < cardsPerRow
+      // prior to penultimate row
+        && (currRowCount < totalRows - 1
+            // for a balanced penultimate row, the question is:
+            // "Am I at a point where there will be at least on less on the next row?"
+            || (balanceRows && currRowCount === totalRows - 1 && currRowLength <= childrenLeft)
+            || currRowCount === totalRows) // then we are the last row and we have children left, so true
+
+// Penultimate and final layout:
+// @ 1, 2, 3 -> no balance
+// @ 4 -> 5 -> 3/2, 6 -> 4/2 (no balance)
+// @ 5 -> 6 -> 4/2, 7 -> 4/3, 8 -> 5/3 (no balance)
+// @ 6 -> 7 -> 4/3, 8 -> 5/3, 9 -> 5/4, 10 -> no balance
+// @ 7 -> 8 -> 5/3, 9-> 5/4, 10 -> 6/4, 11-> 6/5, 12 -> 7/5 (no balance)
+
 /**
  * Lays out children as cards row by row. The items in each row will be the
  * the same height.
@@ -77,38 +97,41 @@ const CardContainer = ({
     || (width !== undefined && width)
     || values[breakpoint]
   const effectiveWidth = rawWidth - (sidePadding !== undefined ? sidePadding : mainPaddingSpec[breakpoint].side) * 2
+  let cardSize = preferredCardSize
+
   const iterativeCardTester = (cardSize) => {
     let test = 1
+    // TODO: if grid-locked, then we can stop testing after 12
     while ((test + 1) * cardSize + spacing * (test) <= effectiveWidth) test += 1
     // TODO: add option to 'grid' children, include 'itemProps' to apply to imposed <Grid> in that case
     // TODO: only lock to 12-factor if we 'grid' the children (in which case grid size = 12/cardsPerRow)
-    return floorTo12Factor(test)
+    return /* cardsPerRow */ floorTo12Factor(test)
   }
+
   const preferredCardsPerRow = iterativeCardTester(preferredCardSize)
-  const cardsPerRow = preferredCardsPerRow > 1
-    ? preferredCardsPerRow
-    : iterativeCardTester(minCardSize)
+  let cardsPerRow
+  if (preferredCardsPerRow === 1) {
+    cardsPerRow = iterativeCardTester(minCardSize)
+    if (cardsPerRow > 1) cardSize = minCardSize
+  }
+  else {
+    cardsPerRow = preferredCardsPerRow
+  }
 
   const totalRows = Math.ceil((children.length + 0.0) / cardsPerRow)
   let childrenMapped = 0
   const rowGroups = [[]]
 
-  const hasNext = (currGroup, childrenMapped) => {
-    if ((totalRows - 1) === rowGroups.length) { // penultimate row
-      return (currGroup.length !== (children.length - childrenMapped)
-        && currGroup.length !== children.length - childrenMapped + 1)
-    }
-    else return currGroup.length + 1 <= cardsPerRow
-      && childrenMapped + 1 <= children.length
-  }
-
   React.Children.forEach(children, (child, i) => {
     let currGroup = rowGroups[rowGroups.length - 1]
-    if (currGroup.length >= cardsPerRow
-        || (balanceRows && !hasNext(currGroup, childrenMapped))) {
+    const info = {}
+    const penultimateRow = rowGroups.length + 1 === totalRows
+    if (!hasNext(balanceRows, rowGroups.length, totalRows, currGroup.length, cardsPerRow, children.length - childrenMapped)) {
+      console.log(false)
       currGroup = []
       rowGroups.push(currGroup)
     }
+    else { console.log(true) }
     if (!child.key) {
       console.warn(msgs.warnChildKey, child)
     }
@@ -119,11 +142,10 @@ const CardContainer = ({
     // see https://material-ui.com/layout/grid/#nested-grid (used v3.9.3)
     child = React.cloneElement(child, {
         style : Object.assign({
-          minWidth    : minCardSize,
-          maxWidth    : preferredCardSize,
+          width      : cardSize,
           marginTop  : rowGroups.length > 1 ? spacing + 'px' : 0,
           marginLeft : currGroup.length > 0 ? (spacing / 2) + 'px' : 0,
-          marginRight : hasNext(currGroup, childrenMapped) ? (spacing / 2) + 'px' : 0,
+          marginRight : hasNext(balanceRows, rowGroups.length, totalRows, currGroup.length + 1, cardsPerRow, children.length - childrenMapped - 1) ? (spacing / 2) + 'px' : 0,
         }, child.props.style)
       })
 
@@ -161,5 +183,7 @@ CardContainer.propTypes = {
 
 export {
   CardContainer,
-  getSpacing
+  /* pkg local */ floorTo12Factor,
+  /* pkg local */ getSpacing,
+  /* pkg local */ hasNext,
 }
