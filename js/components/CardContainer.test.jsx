@@ -81,8 +81,7 @@ const viewportPlugins = [widthPlugin, mainPaddingPlugin]
 
 const standardTestSetup = (childCount, props={}) => {
   const children = []
-  for (let i = 0; i < childCount; i += 1)
-    children.push(<div key={i}>{i}</div>)
+  for (let i = 0; i < childCount; i += 1) {children.push(<div key={i}>{i}</div>)}
   const { getByTestId } = render(
     <ThemeProvider theme={defaultTheme}>
       <ViewportContext plugins={viewportPlugins}>
@@ -133,7 +132,7 @@ describe("CardContainer", () => {
     test("top can be supressed", () => {
       window.innerWidth = pref4Cards
 
-      const cardContainer = standardTestSetup(5, { topWeighting: 0 })
+      const cardContainer = standardTestSetup(5, { topWeighting : 0 })
       expect(cardContainer.children.length).toBe(3) // 2 rows + bottom weightings
       expect(cardContainer.children[0].children.length).toBe(3)
       expect(cardContainer.children[1].children.length).toBe(2)
@@ -142,7 +141,7 @@ describe("CardContainer", () => {
     test("bottom can be supressed", () => {
       window.innerWidth = pref4Cards
 
-      const cardContainer = standardTestSetup(5, { bottomWeighting: 0 })
+      const cardContainer = standardTestSetup(5, { bottomWeighting : 0 })
       expect(cardContainer.children.length).toBe(3) // 2 rows + top weightings
       expect(cardContainer.children[1].children.length).toBe(3)
       expect(cardContainer.children[2].children.length).toBe(2)
@@ -244,10 +243,10 @@ describe("hasNext", () => {
     [6, 10, 6, 4],
   ]
   test.each(hasNextData)("@ %d cards/row, with %d cards left, balances final rows %d/%d",
-      (cardsPerRow, cardsLeft, penultimateCount, ultimateCount)=> {
-    expect(hasNext(true, 2, 3, penultimateCount - 1, cardsPerRow, ultimateCount + 1)).toBe(true)
-    expect(hasNext(true, 2, 3, penultimateCount, cardsPerRow, ultimateCount)).toBe(false)
-  })
+    (cardsPerRow, cardsLeft, penultimateCount, ultimateCount)=> {
+      expect(hasNext(true, 2, 3, penultimateCount - 1, cardsPerRow, ultimateCount + 1)).toBe(true)
+      expect(hasNext(true, 2, 3, penultimateCount, cardsPerRow, ultimateCount)).toBe(false)
+    })
 
   const evenTwoRowBalanceData = [
     [3, 4],
@@ -258,11 +257,11 @@ describe("hasNext", () => {
     [6, 10],
   ]
   test.each(evenTwoRowBalanceData)("with 2 rows total @ %d cards/row, will divide %d cards evenly",
-      (cardsPerRow, totalCards) => {
-    const expectCardsPerRow = totalCards / 2
-    expect(hasNext(true, 1, 2, expectCardsPerRow - 1, cardsPerRow, expectCardsPerRow + 1)).toBe(true)
-    expect(hasNext(true, 1, 2, expectCardsPerRow, cardsPerRow, expectCardsPerRow)).toBe(false)
-  })
+    (cardsPerRow, totalCards) => {
+      const expectCardsPerRow = totalCards / 2
+      expect(hasNext(true, 1, 2, expectCardsPerRow - 1, cardsPerRow, expectCardsPerRow + 1)).toBe(true)
+      expect(hasNext(true, 1, 2, expectCardsPerRow, cardsPerRow, expectCardsPerRow)).toBe(false)
+    })
 
   const oddTwoRowBalanceData = [
     [3, 5, 3, 2],
@@ -274,8 +273,8 @@ describe("hasNext", () => {
     [6, 11, 6, 5],
   ]
   test.each(oddTwoRowBalanceData)("with 2 rows total @ %d cards/row, will divide %d cards in rows of %d/%d",
-      (cardsPerRow, totalCards, penCount, ultCount) => {
-    expect(hasNext(true, 1, 2, penCount - 1, cardsPerRow, ultCount + 1)).toBe(true)
-    expect(hasNext(true, 1, 2, penCount, cardsPerRow, ultCount)).toBe(false)
-  })
+    (cardsPerRow, totalCards, penCount, ultCount) => {
+      expect(hasNext(true, 1, 2, penCount - 1, cardsPerRow, ultCount + 1)).toBe(true)
+      expect(hasNext(true, 1, 2, penCount, cardsPerRow, ultCount)).toBe(false)
+    })
 })

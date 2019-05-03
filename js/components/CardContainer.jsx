@@ -53,7 +53,7 @@ const hasNext = (balanceRows, currRowCount, totalRows, currRowLength, cardsPerRo
       ? currRowLength < childrenLeft
       : currRowLength <= childrenLeft
     : childrenLeft > 0 && currRowLength < cardsPerRow
-      // prior to penultimate row
+    // prior to penultimate row
         && (currRowCount < totalRows - 1
             // for a balanced penultimate row, the question is:
             // "Am I at a point where there will be at least on less on the next row?"
@@ -141,13 +141,13 @@ const CardContainer = ({
     // be flush against the container side.
     // see https://material-ui.com/layout/grid/#nested-grid (used v3.9.3)
     child = React.cloneElement(child, {
-        style : Object.assign({
-          width      : cardSize,
-          marginTop  : rowGroups.length > 1 ? spacing + 'px' : 0,
-          marginLeft : currGroup.length > 0 ? (spacing / 2) + 'px' : 0,
-          marginRight : hasNext(balanceRows, rowGroups.length, totalRows, currGroup.length + 1, cardsPerRow, children.length - childrenMapped - 1) ? (spacing / 2) + 'px' : 0,
-        }, child.props.style)
-      })
+      style : Object.assign({
+        width       : cardSize,
+        marginTop   : rowGroups.length > 1 ? spacing + 'px' : 0,
+        marginLeft  : currGroup.length > 0 ? (spacing / 2) + 'px' : 0,
+        marginRight : hasNext(balanceRows, rowGroups.length, totalRows, currGroup.length + 1, cardsPerRow, children.length - childrenMapped - 1) ? (spacing / 2) + 'px' : 0,
+      }, child.props.style)
+    })
 
     currGroup.push(child)
     childrenMapped += 1
@@ -163,13 +163,13 @@ const CardContainer = ({
   // TODO: extract 'weighting' into a layout component
   return (
     <Grid container className={className} spacing={0} {...props} direction="column">
-      { topWeighting > 0 && <Grid item style={{flex: `${topWeighting} 0 auto`}} xs={12}></Grid> }
+      { topWeighting > 0 && <Grid item style={{flex : `${topWeighting} 0 auto`}} xs={12} /> }
       { rowGroups.map((rowGroup, i) =>
         <Grid justify="center" alignItems="stretch" {...rowProps} key={rowKeys[i]} item container spacing={0}>
           { rowGroup }
         </Grid>
       )}
-      { bottomWeighting > 0 && <Grid item style={{flex: `${bottomWeighting} 0 auto`}} xs={12}></Grid> }
+      { bottomWeighting > 0 && <Grid item style={{flex : `${bottomWeighting} 0 auto`}} xs={12} /> }
     </Grid>
   )
 }
@@ -181,7 +181,7 @@ CardContainer.propTypes = {
   spacing           : PropTypes.number,
   className         : PropTypes.string,
   children          : PropTypes.node.isRequired,
-  rowProps         : PropTypes.object
+  rowProps          : PropTypes.object
 }
 
 export {
