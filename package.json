@@ -8,9 +8,14 @@
     "/dist"
   ],
   "scripts": {
+    "prebuild": "rm -rf ./dist/* && mkdir -p ./dist",
     "build": "catalyst-scripts build",
     "prepare": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "pretest": "TEST_TYPES=unit catalyst-scripts pretest",
+    "test": "TEST_TYPES=unit catalyst-scripts test",
+    "postversion": "git push && git push --tags",
+    "lint": "catalyst-scripts lint",
+    "lint-fix": "catalyst-scripts lint-fix",
     "watch": "catalyst-scripts watch"
   },
   "repository": {
@@ -30,15 +35,24 @@
   },
   "homepage": "https://github.com/Liquid-Labs/mui-extensions#readme",
   "peerDependencies": {
+    "@liquid-labs/react-viewport-context": "^1.0.0-prototype.3",
     "@material-ui/core": "1.x || 3.x",
     "@material-ui/icons": "1.x || 3.x",
+    "@material-ui/styles": "^3.0.0-alpha.10",
     "classnames": "^2.2.6",
     "prop-types": "^15.6.2",
     "react": "^16.8.1",
+    "react-dom": "^16.8.1",
     "recompose": "0.30.0"
   },
   "devDependencies": {
-    "@liquid-labs/catalyst-scripts": "^1.0.0-alpha.12"
+    "@liquid-labs/catalyst-scripts": "^1.0.0-alpha.21",
+    "@liquid-labs/react-viewport-context": "^1.0.0-prototype.4",
+    "@material-ui/core": "^3.9.3",
+    "@material-ui/styles": "^3.0.0-alpha.10",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-testing-library": "^6.1.2"
   },
   "browserslist": [
     ">0.2%",
@@ -46,5 +60,10 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "dependencies": {}
+  "dependencies": {},
+  "catalyst": {
+    "jestConfig": {
+      "testEnvironment": "jsdom"
+    }
+  }
 }
